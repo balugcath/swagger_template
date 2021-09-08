@@ -1,0 +1,111 @@
+swagger: "2.0"
+basePath: /
+host: localhost
+info:
+  version: 0.0.1
+  title: Swagger template
+consumes:
+  - application/json
+produces:
+  - application/json
+schemes:
+  - http
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  /:
+    get:
+      tags: ["todos"]
+      operationId: find
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/item"
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: "#/definitions/item"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+    post:
+      tags: ["todos"]
+      operationId: add
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/item"
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: "#/definitions/item"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /{id}:
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+    put:
+      tags: ["todos"]
+      operationId: update
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/item"
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/item"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+    delete:
+      tags: ["todos"]
+      operationId: destroy
+      responses:
+        "204":
+          description: Deleted
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+definitions:
+  item:
+    type: object
+    required:
+      - description
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      description:
+        type: string
+        minLength: 1
+      completed:
+        type: boolean
+  error:
+    type: object
+    required:
+      - message
+    properties:
+      code:
+        type: integer
+        format: int64
+      message:
+        type: string
